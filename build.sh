@@ -7,7 +7,7 @@
 
 # Variables
 SECONDS=0 # builtin bash timer
-ZIPNAME="ArmaGeddon-Ginkgo|Willow-$(TZ=Asia/Manila date +"%Y%m%d-%H%M").zip"
+ZIPNAME="CIsX~v1-Ginkgo|Willow-$(TZ=Asia/Manila date +"%Y%m%d-%H%M").zip"
 if ! [ $USER = "gitpod" ]; then
 TC_DIR="$HOME/tc/a3-clang"
 else
@@ -17,10 +17,6 @@ AK3_DIR="./ak3"
 DEFCONFIG="vendor/ginkgo-perf_defconfig"
 
 sudo apt install -qq python-is-python3 -y
-
-if ! [ -d "$(pwd)/KernelSU/kernel" ] ; then
-rm -rf KernelSU && rm -rf drivers/kernelsu && curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.2
-fi
 
 export PATH="$TC_DIR/bin:$PATH"
 
@@ -34,8 +30,9 @@ fi
 
 echo -e "\nCompiling with $($TC_DIR/bin/clang --version | head -n1 | cut -d " " -f1,4)\n"
 
-export KBUILD_BUILD_USER=Miraclev1
-export KBUILD_BUILD_HOST=Codespaces
+export KBUILD_BUILD_USER=forest
+export KBUILD_BUILD_HOST=Disconnect0
+export KBUILD_BUILD_VERSION="1"
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
 make O=out ARCH=arm64 $DEFCONFIG savedefconfig
