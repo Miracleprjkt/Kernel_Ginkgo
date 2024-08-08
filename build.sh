@@ -85,28 +85,37 @@ make -j$(nproc --all) O=out ARCH=arm64 CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm 
 if [ -f "out/arch/arm64/boot/Image.gz-dtb" ] && [ -f "out/arch/arm64/boot/dtbo.img" ]; then
 echo -e "\nCompiled Successfully With $($TC_DIR/bin/clang --version | head -n1 | cut -d " " -f1,4)! Zipping up...\n"
 
-# Zipping
+echo -e "\nKernel compiled succesfully! Zipping up...\n"
+git restore arch/arm64/configs/vendor/ginkgo-perf_defconfig
 if [ -d "$AK3_DIR" ]; then
 cp -r $AK3_DIR AnyKernel3
-echo -e "\nAnyKernel3 not found inside the repo! Aborting..."
+elif ! git clone -q https://github.com/Miracleprjkt/AnyKernel3; then
+echo -e "\nAnyKernel3 repo not found locally and cloning failed! Aborting..."
+exit 1
 fi
 cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3
 cp out/arch/arm64/boot/dtbo.img AnyKernel3
 rm -f *zip
 cd AnyKernel3
+git checkout main &> /dev/null
+if [[ $1 = "-k" || $1 = "--ksu" ]]; then
+zip -r9 "../$ZIPNAME_KSU" * -x '*.git*' README.md *placeholder
+else
 zip -r9 "../$ZIPNAME" * -x '*.git*' README.md *placeholder
+fi
 cd ..
 rm -rf AnyKernel3
 rm -rf out/arch/arm64/boot
-echo -e "\nCompleted in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
+echo -e "Completed in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
+if [[ $1 = "-k" || $1 = "--ksu" ]]; then
+echo "Zip: $ZIPNAME_KSU"
+else
 echo "Zip: $ZIPNAME"
-if ! [[ $HOSTNAME = "KOMPUTERTWU" && $USER = "forest" ]]; then
-
-# Uploading
-curl -T $ZIPNAME temp.sh; echo
-echo " "
-curl --upload-file $ZIPNAME https://transfer.sh/$ZIPNAME; echo
 fi
 else
 echo -e "\nCompilation failed!"
+exit 1
 fi
+echo "Move Zip into Home Directory"
+mv *.zip ${LOCAL_DIR}
+echo -e "======================================="
