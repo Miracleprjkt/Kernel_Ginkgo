@@ -7,7 +7,7 @@
 
 # Variables
 SECONDS=0 # builtin bash timer
-ZIPNAME="CIsX~v1-Ginkgo|Willow-$(TZ=Asia/Manila date +"%Y%m%d-%H%M").zip"
+ZIPNAME="Armageddon[Ginkgo]_Kernel-$(TZ=Asia/Manila date +"%Y%m%d-%H%M").zip"
 if ! [ $USER = "gitpod" ]; then
 TC_DIR="$HOME/tc/a3-clang"
 else
@@ -30,8 +30,8 @@ fi
 
 echo -e "\nCompiling with $($TC_DIR/bin/clang --version | head -n1 | cut -d " " -f1,4)\n"
 
-export KBUILD_BUILD_USER=forest
-export KBUILD_BUILD_HOST=Disconnect0
+export KBUILD_BUILD_USER=Miraclev1
+export KBUILD_BUILD_HOST=codespace
 export KBUILD_BUILD_VERSION="1"
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
